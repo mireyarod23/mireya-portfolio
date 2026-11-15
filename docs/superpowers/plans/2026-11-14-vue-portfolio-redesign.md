@@ -8,6 +8,16 @@
 
 **Tech Stack:** Nuxt (latest stable), TypeScript, Tailwind CSS v4 (`@tailwindcss/vite`), Fontsource variable fonts (Space Grotesk, Inter), Vitest, @nuxt/test-utils, happy-dom, Vercel.
 
+**Code conventions (from Mireya's Avanza rules — `~/Development/avanza/docs/agent/rules/{vue,typescript,testing}.md`):**
+- SFC block order `script setup lang="ts"` → `template` → `style scoped` (omit style block if unused); script internal order: imports → props/emits → reactive state → computed → watchers → lifecycle → functions
+- Props via TypeScript generics with a `Props` interface — never runtime object declarations
+- Template shorthand (`:prop`, `@event`), self-close slotless components, `:key` with a stable unique ID (never array index), never `v-if` + `v-for` on the same element
+- No abbreviations (`isMenuOpen`, not `open`); no bare `id` fields (`projectId`); constants SCREAMING_SNAKE_CASE
+- `Array<T>` — never `T[]`; no `any`; `import type` for type-only imports; no TypeScript `enum`
+- No semicolons; trailing commas on multiline expressions; max line length 120; no `console.log`
+- Tests co-located in `__tests__/` next to the file under test; files named `<Component>.spec.ts`; `data-test` attributes for element selection (never class/element selectors); DOM + content assertions, no snapshot-only tests
+- Deliberate deviation: Nuxt auto-imports (`ref`, `useSeoMeta`, components) are used instead of explicit Vue core imports — idiomatic Nuxt, and this site doubles as a Nuxt work sample
+
 **Spec:** `docs/superpowers/specs/2026-11-14-vue-portfolio-redesign-design.md` — read it first for palette, copy, and content rules.
 
 **Working branch:** `codex/vue-portfolio-redesign` (already checked out). Repo root: `/Users/m/Development/webpage_react_aws`.
@@ -34,7 +44,8 @@
 │   │   ├── ProjectCard.vue
 │   │   ├── ExperienceSection.vue
 │   │   ├── SkillsSection.vue
-│   │   └── ContactSection.vue
+│   │   ├── ContactSection.vue
+│   │   └── __tests__/              (co-located specs, one per component)
 │   └── data/
 │       ├── types.ts
 │       ├── site.ts
@@ -46,7 +57,6 @@
 │   └── images/
 │       ├── climate-perspective.jpg
 │       └── ranger-glove.jpg
-├── tests/components/*.spec.ts      (6 spec files)
 └── docs/superpowers/...            (spec + this plan)
 ```
 
@@ -264,19 +274,19 @@ All copy comes from the spec's "Site Structure & Content" section. Components ad
 
 ```ts
 export interface Project {
-  id: string
+  projectId: string
   title: string
   eyebrow?: string
   badge?: string
   description: string
-  tags: string[]
+  tags: Array<string>
   link?: { label: string; url: string }
   image?: { src: string; alt: string }
   flagship?: boolean
 }
 
 export interface ExperienceItem {
-  org: string
+  organization: string
   role: string
   period: string
   summary: string
@@ -285,7 +295,7 @@ export interface ExperienceItem {
 
 export interface SkillGroup {
   label: string
-  items: string[]
+  items: Array<string>
 }
 ```
 
@@ -321,9 +331,9 @@ export const site = {
 ```ts
 import type { Project } from './types'
 
-export const projects: Project[] = [
+export const projects: Array<Project> = [
   {
-    id: 'orion',
+    projectId: 'orion',
     title: 'Orion — drug-discovery SaaS front end',
     eyebrow: 'Flagship · OpenEye, Cadence Molecular Sciences',
     description:
@@ -333,7 +343,7 @@ export const projects: Project[] = [
     flagship: true,
   },
   {
-    id: 'avanza',
+    projectId: 'avanza',
     title: 'Avanza',
     badge: 'In development',
     description:
@@ -341,7 +351,7 @@ export const projects: Project[] = [
     tags: ['Vue 3', 'Storybook', 'Tailwind CSS', 'Vitest'],
   },
   {
-    id: 'climate-perspective',
+    projectId: 'climate-perspective',
     title: 'Climate Perspective',
     description:
       'AI-driven interactive installation at the Bradbury Science Museum, built on the MEAN stack (MongoDB, Express, AngularJS, Node.js).',
@@ -356,14 +366,14 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'bandelier',
+    projectId: 'bandelier',
     title: 'Bandelier AR Tour',
     description:
       'Augmented-reality tour app for Bandelier National Monument, built with Unity and the Vuforia SDK.',
     tags: ['Unity', 'Vuforia', 'C#', 'AR'],
   },
   {
-    id: 'ranger-glove',
+    projectId: 'ranger-glove',
     title: 'Ranger Glove',
     description:
       'Open-source virtual-reality glove built from off-the-shelf parts — my master’s thesis. MIT licensed so anyone can build one.',
@@ -375,7 +385,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'museum-exhibits',
+    projectId: 'museum-exhibits',
     title: 'Museum touch-screen exhibits',
     description:
       'Radiation Knowledge game and Owls & Bats interactive for the Bradbury Science Museum — .NET, Unity, and HTML5.',
@@ -389,9 +399,9 @@ export const projects: Project[] = [
 ```ts
 import type { ExperienceItem } from './types'
 
-export const experience: ExperienceItem[] = [
+export const experience: Array<ExperienceItem> = [
   {
-    org: 'OpenEye, Cadence Molecular Sciences',
+    organization: 'OpenEye, Cadence Molecular Sciences',
     role: 'Software Engineer, Front-End',
     period: '2020 — present',
     summary:
@@ -399,7 +409,7 @@ export const experience: ExperienceItem[] = [
     current: true,
   },
   {
-    org: 'Los Alamos National Laboratory',
+    organization: 'Los Alamos National Laboratory',
     role: 'Software Developer',
     period: '2015 — 2020',
     summary:
@@ -417,7 +427,7 @@ export const education =
 ```ts
 import type { SkillGroup } from './types'
 
-export const skillGroups: SkillGroup[] = [
+export const skillGroups: Array<SkillGroup> = [
   {
     label: 'Front-End',
     items: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Tailwind CSS', 'PrimeVue', 'Vite', 'Storybook'],
@@ -459,7 +469,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 4: Vitest setup + AppNav (TDD)
 
 **Files:**
-- Create: `vitest.config.ts`, `tests/components/AppNav.spec.ts`, `app/components/AppNav.vue`
+- Create: `vitest.config.ts`, `app/components/__tests__/AppNav.spec.ts`, `app/components/AppNav.vue`
 
 - [ ] **Step 1: Write `vitest.config.ts`**
 
@@ -473,7 +483,7 @@ export default defineVitestConfig({
 })
 ```
 
-- [ ] **Step 2: Write the failing test `tests/components/AppNav.spec.ts`**
+- [ ] **Step 2: Write the failing test `app/components/__tests__/AppNav.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -483,7 +493,7 @@ import AppNav from '~/components/AppNav.vue'
 describe('AppNav', () => {
   it('links to all four page sections', async () => {
     const wrapper = await mountSuspended(AppNav)
-    const hrefs = wrapper.findAll('a').map(a => a.attributes('href'))
+    const hrefs = wrapper.findAll('[data-test="nav-link"]').map(link => link.attributes('href'))
     for (const anchor of ['#work', '#experience', '#skills', '#contact']) {
       expect(hrefs).toContain(anchor)
     }
@@ -491,7 +501,14 @@ describe('AppNav', () => {
 
   it('shows the logo mark', async () => {
     const wrapper = await mountSuspended(AppNav)
-    expect(wrapper.text()).toContain('mireya')
+    expect(wrapper.find('[data-test="nav-logo"]').text()).toContain('mireya')
+  })
+
+  it('opens the mobile menu on click', async () => {
+    const wrapper = await mountSuspended(AppNav)
+    expect(wrapper.find('[data-test="mobile-menu"]').exists()).toBe(false)
+    await wrapper.find('[data-test="menu-button"]').trigger('click')
+    expect(wrapper.find('[data-test="mobile-menu"]').exists()).toBe(true)
   })
 })
 ```
@@ -499,7 +516,7 @@ describe('AppNav', () => {
 - [ ] **Step 3: Run test to verify it fails**
 
 ```bash
-cd /Users/m/Development/webpage_react_aws && npx vitest run tests/components/AppNav.spec.ts
+cd /Users/m/Development/webpage_react_aws && npx vitest run app/components/__tests__/AppNav.spec.ts
 ```
 
 Expected: FAIL (cannot resolve `~/components/AppNav.vue`).
@@ -508,9 +525,9 @@ Expected: FAIL (cannot resolve `~/components/AppNav.vue`).
 
 ```vue
 <script setup lang="ts">
-const open = ref(false)
+const isMenuOpen = ref(false)
 
-const links = [
+const sectionLinks = [
   { label: 'Work', href: '#work' },
   { label: 'Experience', href: '#experience' },
   { label: 'Skills', href: '#skills' },
@@ -520,58 +537,73 @@ const links = [
 <template>
   <header class="sticky top-0 z-50 border-b-2 border-ink bg-cream/95 backdrop-blur">
     <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3" aria-label="Main">
-      <a href="#top" class="font-display text-lg font-bold">
+      <a href="#top" data-test="nav-logo" class="font-display text-lg font-bold">
         mireya<span class="text-berry">.</span>
       </a>
 
       <div class="hidden items-center gap-6 text-sm font-semibold sm:flex">
-        <a v-for="link in links" :key="link.href" :href="link.href" class="hover:text-berry">
-          {{ link.label }}
+        <a
+          v-for="sectionLink in sectionLinks"
+          :key="sectionLink.href"
+          :href="sectionLink.href"
+          data-test="nav-link"
+          class="hover:text-berry"
+        >
+          {{ sectionLink.label }}
         </a>
-        <a href="#contact" class="rounded-md bg-berry px-3 py-1.5 text-cream transition hover:bg-ink">
+        <a
+          href="#contact"
+          data-test="nav-link"
+          class="rounded-md bg-berry px-3 py-1.5 text-cream transition hover:bg-ink"
+        >
           Contact
         </a>
       </div>
 
       <button
+        data-test="menu-button"
         class="rounded-md border-2 border-ink px-2 py-1 text-sm font-bold sm:hidden"
-        :aria-expanded="open"
+        :aria-expanded="isMenuOpen"
         aria-controls="mobile-menu"
-        @click="open = !open"
+        @click="isMenuOpen = !isMenuOpen"
       >
         Menu
       </button>
     </nav>
 
-    <div v-if="open" id="mobile-menu" class="border-t-2 border-ink px-6 py-2 sm:hidden">
+    <div
+      v-if="isMenuOpen"
+      id="mobile-menu"
+      data-test="mobile-menu"
+      class="border-t-2 border-ink px-6 py-2 sm:hidden"
+    >
       <a
-        v-for="link in [...links, { label: 'Contact', href: '#contact' }]"
-        :key="link.href"
-        :href="link.href"
+        v-for="sectionLink in [...sectionLinks, { label: 'Contact', href: '#contact' }]"
+        :key="sectionLink.href"
+        :href="sectionLink.href"
+        data-test="mobile-nav-link"
         class="block py-2 text-sm font-semibold hover:text-berry"
-        @click="open = false"
+        @click="isMenuOpen = false"
       >
-        {{ link.label }}
+        {{ sectionLink.label }}
       </a>
     </div>
   </header>
 </template>
 ```
 
-Note on the test: the mobile menu links only exist when `open` is true, but the desktop links (hidden via CSS, still in the DOM) cover all four anchors, so the test passes as written.
-
 - [ ] **Step 5: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/AppNav.spec.ts
+npx vitest run app/components/__tests__/AppNav.spec.ts
 ```
 
-Expected: PASS (2 tests).
+Expected: PASS (3 tests).
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add vitest.config.ts tests app/components/AppNav.vue
+git add vitest.config.ts app/components
 git commit -m "feat: add sticky anchor nav with mobile menu (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -582,9 +614,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 5: HeroSection (TDD)
 
 **Files:**
-- Create: `tests/components/HeroSection.spec.ts`, `app/components/HeroSection.vue`
+- Create: `app/components/__tests__/HeroSection.spec.ts`, `app/components/HeroSection.vue`
 
-- [ ] **Step 1: Write the failing test `tests/components/HeroSection.spec.ts`**
+- [ ] **Step 1: Write the failing test `app/components/__tests__/HeroSection.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -601,6 +633,8 @@ describe('HeroSection', () => {
 
   it('renders every stack badge', async () => {
     const wrapper = await mountSuspended(HeroSection)
+    const badges = wrapper.findAll('[data-test="hero-badge"]')
+    expect(badges.length).toBe(site.badges.length)
     for (const badge of site.badges) {
       expect(wrapper.text()).toContain(badge)
     }
@@ -608,9 +642,8 @@ describe('HeroSection', () => {
 
   it('links to GitHub and LinkedIn', async () => {
     const wrapper = await mountSuspended(HeroSection)
-    const hrefs = wrapper.findAll('a').map(a => a.attributes('href'))
-    expect(hrefs).toContain(site.links.github)
-    expect(hrefs).toContain(site.links.linkedin)
+    expect(wrapper.find('[data-test="hero-github-link"]').attributes('href')).toBe(site.links.github)
+    expect(wrapper.find('[data-test="hero-linkedin-link"]').attributes('href')).toBe(site.links.linkedin)
   })
 })
 ```
@@ -618,7 +651,7 @@ describe('HeroSection', () => {
 - [ ] **Step 2: Run test to verify it fails**
 
 ```bash
-npx vitest run tests/components/HeroSection.spec.ts
+npx vitest run app/components/__tests__/HeroSection.spec.ts
 ```
 
 Expected: FAIL (cannot resolve component).
@@ -643,14 +676,17 @@ import { site } from '~/data/site'
     <div class="mt-8 flex flex-wrap gap-3">
       <a
         href="#work"
+        data-test="hero-work-link"
         class="-rotate-1 rounded-lg bg-ink px-5 py-2.5 text-sm font-bold text-cream transition hover:rotate-0 hover:bg-berry"
       >See my work ↓</a>
       <a
         :href="site.links.github"
+        data-test="hero-github-link"
         class="rounded-lg border-2 border-ink px-4 py-2 text-sm font-bold transition hover:bg-ink hover:text-cream"
       >GitHub</a>
       <a
         :href="site.links.linkedin"
+        data-test="hero-linkedin-link"
         class="rounded-lg border-2 border-ink px-4 py-2 text-sm font-bold transition hover:bg-ink hover:text-cream"
       >LinkedIn</a>
     </div>
@@ -659,6 +695,7 @@ import { site } from '~/data/site'
       <li
         v-for="badge in site.badges"
         :key="badge"
+        data-test="hero-badge"
         class="rounded-full border border-tan bg-white px-3 py-1 text-xs font-semibold"
       >{{ badge }}</li>
     </ul>
@@ -669,7 +706,7 @@ import { site } from '~/data/site'
 - [ ] **Step 4: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/HeroSection.spec.ts
+npx vitest run app/components/__tests__/HeroSection.spec.ts
 ```
 
 Expected: PASS (3 tests).
@@ -677,7 +714,7 @@ Expected: PASS (3 tests).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tests/components/HeroSection.spec.ts app/components/HeroSection.vue
+git add app/components/__tests__/HeroSection.spec.ts app/components/HeroSection.vue
 git commit -m "feat: add hero section (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -688,9 +725,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 6: ProjectCard + WorkSection (TDD)
 
 **Files:**
-- Create: `tests/components/WorkSection.spec.ts`, `app/components/ProjectCard.vue`, `app/components/WorkSection.vue`
+- Create: `app/components/__tests__/WorkSection.spec.ts`, `app/components/ProjectCard.vue`, `app/components/WorkSection.vue`
 
-- [ ] **Step 1: Write the failing test `tests/components/WorkSection.spec.ts`**
+- [ ] **Step 1: Write the failing test `app/components/__tests__/WorkSection.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -709,14 +746,14 @@ describe('WorkSection', () => {
   it('marks Avanza as in development with no outbound link', async () => {
     const wrapper = await mountSuspended(WorkSection)
     expect(wrapper.text()).toContain('In development')
-    const hrefs = wrapper.findAll('a').map(a => a.attributes('href') ?? '')
-    expect(hrefs.some(h => h.toLowerCase().includes('avanza'))).toBe(false)
+    const hrefs = wrapper.findAll('[data-test="project-link"]').map(link => link.attributes('href') ?? '')
+    expect(hrefs.some(href => href.toLowerCase().includes('avanza'))).toBe(false)
   })
 
   it('shows images only for projects that define them', async () => {
     const wrapper = await mountSuspended(WorkSection)
-    const expected = projects.filter(p => p.image).length
-    expect(wrapper.findAll('img').length).toBe(expected)
+    const expectedCount = projects.filter(project => project.image).length
+    expect(wrapper.findAll('[data-test="project-image"]').length).toBe(expectedCount)
   })
 })
 ```
@@ -724,7 +761,7 @@ describe('WorkSection', () => {
 - [ ] **Step 2: Run test to verify it fails**
 
 ```bash
-npx vitest run tests/components/WorkSection.spec.ts
+npx vitest run app/components/__tests__/WorkSection.spec.ts
 ```
 
 Expected: FAIL (cannot resolve component).
@@ -735,7 +772,11 @@ Expected: FAIL (cannot resolve component).
 <script setup lang="ts">
 import type { Project } from '~/data/types'
 
-defineProps<{ project: Project }>()
+interface Props {
+  project: Project
+}
+
+defineProps<Props>()
 </script>
 
 <template>
@@ -750,6 +791,7 @@ defineProps<{ project: Project }>()
       {{ project.title }}
       <span
         v-if="project.badge"
+        data-test="project-badge"
         class="ml-2 inline-block -translate-y-0.5 rounded-full bg-berry px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-cream"
       >{{ project.badge }}</span>
     </h3>
@@ -757,6 +799,7 @@ defineProps<{ project: Project }>()
       v-if="project.image"
       :src="project.image.src"
       :alt="project.image.alt"
+      data-test="project-image"
       class="mt-3 w-full rounded-lg border border-tan"
       loading="lazy"
     >
@@ -765,6 +808,7 @@ defineProps<{ project: Project }>()
     <a
       v-if="project.link"
       :href="project.link.url"
+      data-test="project-link"
       class="mt-3 inline-block text-sm font-bold text-berry hover:underline"
     >{{ project.link.label }} →</a>
   </article>
@@ -783,7 +827,7 @@ import { projects } from '~/data/projects'
     <div class="mx-auto max-w-5xl px-6">
       <h2 class="font-display text-3xl font-bold">Selected work<span class="text-berry">.</span></h2>
       <div class="mt-8 grid gap-5 sm:grid-cols-2">
-        <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+        <ProjectCard v-for="project in projects" :key="project.projectId" :project="project" />
       </div>
     </div>
   </section>
@@ -793,7 +837,7 @@ import { projects } from '~/data/projects'
 - [ ] **Step 5: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/WorkSection.spec.ts
+npx vitest run app/components/__tests__/WorkSection.spec.ts
 ```
 
 Expected: PASS (3 tests).
@@ -801,7 +845,7 @@ Expected: PASS (3 tests).
 - [ ] **Step 6: Commit**
 
 ```bash
-git add tests/components/WorkSection.spec.ts app/components/ProjectCard.vue app/components/WorkSection.vue
+git add app/components/__tests__/WorkSection.spec.ts app/components/ProjectCard.vue app/components/WorkSection.vue
 git commit -m "feat: add selected-work section with project cards (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -812,9 +856,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 7: ExperienceSection (TDD)
 
 **Files:**
-- Create: `tests/components/ExperienceSection.spec.ts`, `app/components/ExperienceSection.vue`
+- Create: `app/components/__tests__/ExperienceSection.spec.ts`, `app/components/ExperienceSection.vue`
 
-- [ ] **Step 1: Write the failing test `tests/components/ExperienceSection.spec.ts`**
+- [ ] **Step 1: Write the failing test `app/components/__tests__/ExperienceSection.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -825,8 +869,10 @@ import { education, experience } from '~/data/experience'
 describe('ExperienceSection', () => {
   it('renders every employer with role and period', async () => {
     const wrapper = await mountSuspended(ExperienceSection)
+    const items = wrapper.findAll('[data-test="experience-item"]')
+    expect(items.length).toBe(experience.length)
     for (const item of experience) {
-      expect(wrapper.text()).toContain(item.org)
+      expect(wrapper.text()).toContain(item.organization)
       expect(wrapper.text()).toContain(item.role)
       expect(wrapper.text()).toContain(item.period)
     }
@@ -834,7 +880,7 @@ describe('ExperienceSection', () => {
 
   it('renders the education line', async () => {
     const wrapper = await mountSuspended(ExperienceSection)
-    expect(wrapper.text()).toContain(education)
+    expect(wrapper.find('[data-test="education"]').text()).toContain(education)
   })
 })
 ```
@@ -842,7 +888,7 @@ describe('ExperienceSection', () => {
 - [ ] **Step 2: Run test to verify it fails**
 
 ```bash
-npx vitest run tests/components/ExperienceSection.spec.ts
+npx vitest run app/components/__tests__/ExperienceSection.spec.ts
 ```
 
 Expected: FAIL (cannot resolve component).
@@ -860,12 +906,13 @@ import { education, experience } from '~/data/experience'
     <ol class="mt-8 space-y-6">
       <li
         v-for="item in experience"
-        :key="item.org"
+        :key="item.organization"
+        data-test="experience-item"
         class="border-l-4 pl-5"
         :class="item.current ? 'border-berry' : 'border-tan'"
       >
         <h3 class="font-display text-lg font-bold">
-          {{ item.org }}
+          {{ item.organization }}
           <span class="ml-1 text-sm font-semibold text-ink/50">
             · {{ item.role }} · {{ item.period }}
           </span>
@@ -873,7 +920,7 @@ import { education, experience } from '~/data/experience'
         <p class="mt-1 text-sm text-ink/70">{{ item.summary }}</p>
       </li>
     </ol>
-    <p class="mt-8 text-sm text-ink/60">{{ education }}</p>
+    <p data-test="education" class="mt-8 text-sm text-ink/60">{{ education }}</p>
   </section>
 </template>
 ```
@@ -881,7 +928,7 @@ import { education, experience } from '~/data/experience'
 - [ ] **Step 4: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/ExperienceSection.spec.ts
+npx vitest run app/components/__tests__/ExperienceSection.spec.ts
 ```
 
 Expected: PASS (2 tests).
@@ -889,7 +936,7 @@ Expected: PASS (2 tests).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tests/components/ExperienceSection.spec.ts app/components/ExperienceSection.vue
+git add app/components/__tests__/ExperienceSection.spec.ts app/components/ExperienceSection.vue
 git commit -m "feat: add experience timeline section (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -900,9 +947,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 8: SkillsSection (TDD)
 
 **Files:**
-- Create: `tests/components/SkillsSection.spec.ts`, `app/components/SkillsSection.vue`
+- Create: `app/components/__tests__/SkillsSection.spec.ts`, `app/components/SkillsSection.vue`
 
-- [ ] **Step 1: Write the failing test `tests/components/SkillsSection.spec.ts`**
+- [ ] **Step 1: Write the failing test `app/components/__tests__/SkillsSection.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -913,6 +960,8 @@ import { skillGroups } from '~/data/skills'
 describe('SkillsSection', () => {
   it('renders every skill group and its items', async () => {
     const wrapper = await mountSuspended(SkillsSection)
+    const groups = wrapper.findAll('[data-test="skill-group"]')
+    expect(groups.length).toBe(skillGroups.length)
     for (const group of skillGroups) {
       expect(wrapper.text()).toContain(group.label)
       for (const item of group.items) {
@@ -926,7 +975,7 @@ describe('SkillsSection', () => {
 - [ ] **Step 2: Run test to verify it fails**
 
 ```bash
-npx vitest run tests/components/SkillsSection.spec.ts
+npx vitest run app/components/__tests__/SkillsSection.spec.ts
 ```
 
 Expected: FAIL (cannot resolve component).
@@ -943,7 +992,7 @@ import { skillGroups } from '~/data/skills'
     <div class="mx-auto max-w-5xl px-6">
       <h2 class="font-display text-3xl font-bold">Skills<span class="text-berry-light">.</span></h2>
       <dl class="mt-8 grid gap-6 sm:grid-cols-2">
-        <div v-for="group in skillGroups" :key="group.label">
+        <div v-for="group in skillGroups" :key="group.label" data-test="skill-group">
           <dt class="text-[11px] font-bold uppercase tracking-[0.15em] text-berry-light">
             {{ group.label }}
           </dt>
@@ -958,7 +1007,7 @@ import { skillGroups } from '~/data/skills'
 - [ ] **Step 4: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/SkillsSection.spec.ts
+npx vitest run app/components/__tests__/SkillsSection.spec.ts
 ```
 
 Expected: PASS (1 test).
@@ -966,7 +1015,7 @@ Expected: PASS (1 test).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tests/components/SkillsSection.spec.ts app/components/SkillsSection.vue
+git add app/components/__tests__/SkillsSection.spec.ts app/components/SkillsSection.vue
 git commit -m "feat: add skills section on dark band (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -977,9 +1026,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 9: ContactSection with footer (TDD)
 
 **Files:**
-- Create: `tests/components/ContactSection.spec.ts`, `app/components/ContactSection.vue`
+- Create: `app/components/__tests__/ContactSection.spec.ts`, `app/components/ContactSection.vue`
 
-- [ ] **Step 1: Write the failing test `tests/components/ContactSection.spec.ts`**
+- [ ] **Step 1: Write the failing test `app/components/__tests__/ContactSection.spec.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -990,17 +1039,16 @@ import { site } from '~/data/site'
 describe('ContactSection', () => {
   it('renders a mailto link with the email', async () => {
     const wrapper = await mountSuspended(ContactSection)
-    const mailto = wrapper.findAll('a').find(a => a.attributes('href') === `mailto:${site.email}`)
-    expect(mailto).toBeDefined()
-    expect(mailto!.text()).toContain(site.email)
+    const emailLink = wrapper.find('[data-test="email-link"]')
+    expect(emailLink.attributes('href')).toBe(`mailto:${site.email}`)
+    expect(emailLink.text()).toContain(site.email)
   })
 
   it('links to LinkedIn, GitHub, and the source repo', async () => {
     const wrapper = await mountSuspended(ContactSection)
-    const hrefs = wrapper.findAll('a').map(a => a.attributes('href'))
-    expect(hrefs).toContain(site.links.linkedin)
-    expect(hrefs).toContain(site.links.github)
-    expect(hrefs).toContain(site.links.repo)
+    expect(wrapper.find('[data-test="linkedin-link"]').attributes('href')).toBe(site.links.linkedin)
+    expect(wrapper.find('[data-test="github-link"]').attributes('href')).toBe(site.links.github)
+    expect(wrapper.find('[data-test="repo-link"]').attributes('href')).toBe(site.links.repo)
   })
 
   it('does not contain a phone number', async () => {
@@ -1013,7 +1061,7 @@ describe('ContactSection', () => {
 - [ ] **Step 2: Run test to verify it fails**
 
 ```bash
-npx vitest run tests/components/ContactSection.spec.ts
+npx vitest run app/components/__tests__/ContactSection.spec.ts
 ```
 
 Expected: FAIL (cannot resolve component).
@@ -1031,16 +1079,17 @@ import { site } from '~/data/site'
     <p class="mt-3 text-ink/70">Open to interesting front-end work and collaborations.</p>
     <a
       :href="`mailto:${site.email}`"
+      data-test="email-link"
       class="mt-7 inline-block -rotate-1 rounded-lg bg-berry px-6 py-3 font-bold text-cream transition hover:rotate-0 hover:bg-ink"
     >{{ site.email }}</a>
     <p class="mt-6 space-x-4 text-sm font-bold">
-      <a :href="site.links.linkedin" class="hover:text-berry">LinkedIn</a>
+      <a :href="site.links.linkedin" data-test="linkedin-link" class="hover:text-berry">LinkedIn</a>
       <span aria-hidden="true">·</span>
-      <a :href="site.links.github" class="hover:text-berry">GitHub</a>
+      <a :href="site.links.github" data-test="github-link" class="hover:text-berry">GitHub</a>
     </p>
     <footer class="mt-14 text-xs text-ink/40">
       Built with Nuxt + TypeScript + Tailwind · deployed on Vercel ·
-      <a :href="site.links.repo" class="underline hover:text-berry">view source on GitHub</a>
+      <a :href="site.links.repo" data-test="repo-link" class="underline hover:text-berry">view source on GitHub</a>
     </footer>
   </section>
 </template>
@@ -1049,7 +1098,7 @@ import { site } from '~/data/site'
 - [ ] **Step 4: Run test to verify it passes**
 
 ```bash
-npx vitest run tests/components/ContactSection.spec.ts
+npx vitest run app/components/__tests__/ContactSection.spec.ts
 ```
 
 Expected: PASS (3 tests).
@@ -1057,7 +1106,7 @@ Expected: PASS (3 tests).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tests/components/ContactSection.spec.ts app/components/ContactSection.vue
+git add app/components/__tests__/ContactSection.spec.ts app/components/ContactSection.vue
 git commit -m "feat: add contact section with footer (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -1065,11 +1114,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 ---
 
-### Task 10: Assemble the page, SEO head, README; full verification
+### Task 10: Assemble the page, 404, SEO head, README; full verification
 
 **Files:**
 - Modify: `app/app.vue` (replace placeholder)
-- Create: `README.md`
+- Create: `app/error.vue`, `README.md`
 
 - [ ] **Step 1: Replace `app/app.vue`**
 
@@ -1128,7 +1177,11 @@ useHead({
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-defineProps<{ error: NuxtError }>()
+interface Props {
+  error: NuxtError
+}
+
+defineProps<Props>()
 </script>
 
 <template>
@@ -1202,7 +1255,7 @@ Expected: 200 (or 999 from LinkedIn, which blocks bots — acceptable). If the L
 
 - [ ] **Step 7: Visual review with the user**
 
-Run `npm run dev` and ask Mireya to open http://localhost:3000 — check desktop and narrow (mobile) widths, anchor scrolling, hover states, and the mobile menu. Also visit a bad path like http://localhost:3000/nope to see the 404 page. Fix anything she flags before continuing.
+Run `npm run dev` and ask Mireya to open http://localhost:3000 — check desktop and narrow (mobile) widths, anchor scrolling, hover states, and the mobile menu. Also visit a bad path like http://localhost:3000/nope to see the 404 page. Fix anything she flags before continuing. (Borrow the Avanza `browser-pass` checklist spirit: clipping, stacking, focus rings, contrast at both widths.)
 
 - [ ] **Step 8: Commit**
 
@@ -1217,7 +1270,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 ### Task 11: Merge to master and push
 
-Requires Mireya's approval of the local site (Task 10 Step 6) first.
+Requires Mireya's approval of the local site (Task 10 Step 7) first.
 
 - [ ] **Step 1: Push the branch**
 
