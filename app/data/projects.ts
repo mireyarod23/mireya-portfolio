@@ -26,7 +26,7 @@ export const projects: Array<Project> = [
     tags: ['AngularJS', 'Node.js', 'MongoDB', 'Machine learning'],
     link: {
       label: 'Bradbury Science Museum',
-      url: 'https://www.lanl.gov/museum/exhibitions/research-gallery/climate-perspectives-about.php',
+      url: 'https://www.lanl.gov/museum',
     },
     image: {
       src: '/images/climate-perspective.jpg',
