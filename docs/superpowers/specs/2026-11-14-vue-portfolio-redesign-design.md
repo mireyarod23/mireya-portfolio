@@ -30,7 +30,7 @@ Single page, sections in order, sticky top nav with anchor links (Work · Experi
 
 1. **Hero** — Headline "I build interfaces people actually like using." Eyebrow: "Front-End Developer · Albuquerque, NM". Intro sentence drawn from resume summary (11+ years, Vue 3/Nuxt at OpenEye for drug-discovery scientists). Buttons: "See my work ↓" (scrolls to Work), GitHub, LinkedIn. Stack badges: Vue 3, Nuxt, TypeScript, Tailwind CSS, Vitest, Cypress. Text-led — no photo.
 2. **Selected Work** — card grid:
-   - **Orion (OpenEye, Cadence Molecular Sciences)** — flagship full-width card: migrated legacy AngularJS workflows to Vue 3/Nuxt/TypeScript; design-system components with Storybook + PrimeVue; interactive charts for scientific data; Vitest + Cypress testing. No public repo (commercial product); the card links to the Orion product page on openeye.com.
+   - **Orion (OpenEye, Cadence Molecular Sciences)** — flagship full-width card: migrated legacy AngularJS workflows to Vue 3/Nuxt/TypeScript; design-system components with Storybook + PrimeVue; interactive charts for scientific data; Vitest + Cypress testing. Text-only card with no outbound link — Orion is OpenEye's property; the card describes Mireya's role only (same scope as her public resume).
    - **Climate Perspective** — AI-driven installation, Bradbury Science Museum (MEAN stack). Links to the LANL museum page. Reuses `Climate_P.png`.
    - **Bandelier AR Tour** — Unity + Vuforia AR tour app for Bandelier National Monument.
    - **Ranger Glove** — open-source VR glove, master's thesis. Links to github.com/mireyarod23/RangerGlove. Reuses `Ranger_Glove.jpg`.

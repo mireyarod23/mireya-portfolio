@@ -339,7 +339,6 @@ export const projects: Array<Project> = [
     description:
       'Migrated legacy AngularJS workflows to Vue 3, Nuxt, and TypeScript. Design-system components built in Storybook with PrimeVue, interactive charts for scientific data, and Vitest + Cypress test coverage.',
     tags: ['Vue 3', 'Nuxt', 'TypeScript', 'Tailwind', 'Storybook', 'PrimeVue'],
-    link: { label: 'Orion at OpenEye', url: 'https://www.eyesopen.com/orion' },
     flagship: true,
   },
   {
@@ -1246,7 +1245,7 @@ Expected: each `grep -c` prints 1 or more.
 - [ ] **Step 6: Check outbound links are alive**
 
 ```bash
-for url in https://www.eyesopen.com/orion "https://www.lanl.gov/museum/exhibitions/research-gallery/climate-perspectives-about.php" https://github.com/mireyarod23/RangerGlove https://www.linkedin.com/in/mireyarodev https://github.com/mireyarod23; do
+for url in "https://www.lanl.gov/museum/exhibitions/research-gallery/climate-perspectives-about.php" https://github.com/mireyarod23/RangerGlove https://www.linkedin.com/in/mireyarodev https://github.com/mireyarod23; do
   printf "%s -> " "$url"; curl -s -o /dev/null -w "%{http_code}\n" -L --max-time 15 -A "Mozilla/5.0" "$url"
 done
 ```
