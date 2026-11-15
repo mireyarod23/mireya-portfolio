@@ -32,6 +32,8 @@ defineProps<Props>()
       data-test="project-image"
       class="mt-3 w-full rounded-lg border border-line"
       loading="lazy"
+      width="1200"
+      height="715"
     >
     <p class="mt-2 text-sm leading-relaxed text-ink-muted">{{ project.description }}</p>
     <p class="mt-3 font-mono text-[10px] uppercase tracking-wide text-ink-faint">{{ project.tags.join(' · ') }}</p>
@@ -39,6 +41,8 @@ defineProps<Props>()
       v-if="project.link"
       :href="project.link.url"
       data-test="project-link"
+      target="_blank"
+      rel="noopener noreferrer"
       class="mt-3 inline-block text-sm font-bold text-teal hover:underline"
     >{{ project.link.label }} →</a>
   </article>

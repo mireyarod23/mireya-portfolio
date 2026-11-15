@@ -17,6 +17,8 @@ defineProps<Props>()
         v-if="project.link"
         :href="project.link.url"
         data-test="project-link"
+        target="_blank"
+        rel="noopener noreferrer"
         class="ml-2 font-bold text-teal hover:underline"
       >{{ project.link.label }} →</a>
     </p>

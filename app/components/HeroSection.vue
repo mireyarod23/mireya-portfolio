@@ -20,11 +20,15 @@ import { site } from '~/data/site'
         <a
           :href="site.links.github"
           data-test="hero-github-link"
+          target="_blank"
+          rel="noopener noreferrer"
           class="rounded-full border border-petrol-line px-5 py-2 text-sm font-semibold transition hover:border-mint hover:text-mint"
         >GitHub</a>
         <a
           :href="site.links.linkedin"
           data-test="hero-linkedin-link"
+          target="_blank"
+          rel="noopener noreferrer"
           class="rounded-full border border-petrol-line px-5 py-2 text-sm font-semibold transition hover:border-mint hover:text-mint"
         >LinkedIn</a>
       </div>

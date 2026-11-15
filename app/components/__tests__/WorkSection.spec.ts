@@ -21,9 +21,12 @@ describe('WorkSection', () => {
 
   it('marks Avanza as in development with no outbound link', async () => {
     const wrapper = await mountSuspended(WorkSection)
-    expect(wrapper.text()).toContain('In development')
-    const hrefs = wrapper.findAll('[data-test="project-link"]').map(link => link.attributes('href') ?? '')
-    expect(hrefs.some(href => href.toLowerCase().includes('avanza'))).toBe(false)
+    const avanzaCard = wrapper
+      .findAll('[data-test="project-card"]')
+      .find(card => card.text().includes('Avanza'))
+    expect(avanzaCard).toBeDefined()
+    expect(avanzaCard!.find('[data-test="project-link"]').exists()).toBe(false)
+    expect(avanzaCard!.find('[data-test="project-badge"]').text()).toBe('In development')
   })
 
   it('shows images only for projects that define them', async () => {
