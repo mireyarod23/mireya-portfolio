@@ -16,7 +16,7 @@ export const site = {
   links: {
     github: 'https://github.com/mireyarod23',
     linkedin: 'https://www.linkedin.com/in/mireyarodev',
-    repo: 'https://github.com/mireyarod23/webpage_react_aws',
+    repo: 'https://github.com/mireyarod23/mireya-portfolio',
   },
   badges: ['Vue 3', 'Nuxt', 'TypeScript', 'Tailwind CSS', 'Vitest', 'Cypress'],
 }
