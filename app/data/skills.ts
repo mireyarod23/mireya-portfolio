@@ -11,7 +11,7 @@ export const skillGroups: Array<SkillGroup> = [
   },
   {
     label: 'AI-Assisted Development',
-    items: ['Claude Code', 'Codex', 'GitHub Copilot'],
+    items: ['Claude Code', 'Codex', 'GitHub Copilot', 'Custom agent skills & coding standards'],
   },
   {
     label: 'Data & More',

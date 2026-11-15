@@ -15,7 +15,7 @@ export const projects: Array<Project> = [
     title: 'Avanza',
     badge: 'In development',
     description:
-      'Solo-built full-stack product: a Vue 3 + TypeScript web app and a GraphQL API on Node.js in a monorepo, with background job queues, realtime data on Supabase, SMS integration, and a reusable component library documented in Storybook. Private while in development.',
+      'Solo-built full-stack product: a Vue 3 + TypeScript web app and a GraphQL API on Node.js in a monorepo, with background job queues, realtime data on Supabase, SMS integration, and a reusable component library documented in Storybook. Built to strict coding standards enforced by custom AI agent skills. Private while in development.',
     tags: ['Vue 3', 'TypeScript', 'GraphQL', 'Node.js', 'Supabase', 'Storybook'],
   },
   {
