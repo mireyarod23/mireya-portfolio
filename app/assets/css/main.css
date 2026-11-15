@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme {
+  --color-petrol: #0d3b3e;
+  --color-petrol-line: #2e5a5c;
+  --color-mint: #6fc2b4;
+  --color-teal: #1d7a6e;
+  --color-amber: #ffb35c;
+  --color-paper: #f6f9f7;
+  --color-card: #fbfdfc;
+  --color-line: #dbe6e0;
+  --color-ink: #22302d;
+  --color-ink-muted: #5c6b65;
+  --color-ink-faint: #8fa39b;
+  --color-frost: #eef6f4;
+  --color-frost-muted: #9dc4bd;
+  --color-frost-body: #c7ded8;
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

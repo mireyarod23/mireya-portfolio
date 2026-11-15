@@ -1,38 +1,30 @@
 {
-  "name": "webpage_react_aws",
-  "version": "0.1.0",
+  "name": "mireyaroddev",
   "private": true,
-  "dependencies": {
-    "bootstrap": "^4.3.1",
-    "holderjs": "^2.9.6",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.0.0-beta.6",
-    "react-dom": "^16.8.6",
-    "react-router-bootstrap": "^0.25.0",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.1",
-    "styled-components": "^4.2.1"
-  },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "aws s3 cp --recursive ./build s3://mireyarodwebpage.com"
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "vitest run",
+    "typecheck": "nuxi typecheck"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "nuxt": "^4.0.0",
+    "vue": "^3.5.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@fontsource-variable/inter": "^5.0.0",
+    "@fontsource-variable/jetbrains-mono": "^5.0.0",
+    "@fontsource-variable/space-grotesk": "^5.0.0",
+    "@nuxt/test-utils": "^4.4.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@vue/test-utils": "^2.4.0",
+    "happy-dom": "^21.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^5.0.0",
+    "vue-tsc": "^2.1.0"
   }
 }
