@@ -38,7 +38,7 @@ const sectionLinks = [
         data-test="menu-button"
         class="rounded-full border border-petrol-line px-3 py-1 text-sm font-semibold sm:hidden"
         :aria-expanded="isMenuOpen"
-        aria-controls="mobile-menu"
+        @keydown.esc="isMenuOpen = false"
         @click="isMenuOpen = !isMenuOpen"
       >
         Menu
@@ -47,7 +47,6 @@ const sectionLinks = [
 
     <div
       v-if="isMenuOpen"
-      id="mobile-menu"
       data-test="mobile-menu"
       class="border-t border-petrol-line px-6 py-2 sm:hidden"
     >

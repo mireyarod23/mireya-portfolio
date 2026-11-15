@@ -22,4 +22,12 @@ describe('AppNav', () => {
     await wrapper.find('[data-test="menu-button"]').trigger('click')
     expect(wrapper.find('[data-test="mobile-menu"]').exists()).toBe(true)
   })
+
+  it('closes the mobile menu when a link is clicked', async () => {
+    const wrapper = await mountSuspended(AppNav)
+    await wrapper.find('[data-test="menu-button"]').trigger('click')
+    expect(wrapper.find('[data-test="mobile-menu"]').exists()).toBe(true)
+    await wrapper.find('[data-test="mobile-nav-link"]').trigger('click')
+    expect(wrapper.find('[data-test="mobile-menu"]').exists()).toBe(false)
+  })
 })
