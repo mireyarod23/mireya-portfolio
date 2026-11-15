@@ -15,8 +15,8 @@ export const projects: Array<Project> = [
     title: 'Avanza',
     badge: 'In development',
     description:
-      'Building a reusable Vue 3 component library with Storybook, Tailwind CSS, and Vitest. Private while in development.',
-    tags: ['Vue 3', 'Storybook', 'Tailwind CSS', 'Vitest'],
+      'Solo-built full-stack product: a Vue 3 + TypeScript web app and Node.js API in a monorepo, with background job queues, realtime data on Supabase, SMS integration, and a reusable component library documented in Storybook. Private while in development.',
+    tags: ['Vue 3', 'TypeScript', 'Node.js', 'Supabase', 'Storybook', 'Vitest'],
   },
   {
     projectId: 'climate-perspective',
