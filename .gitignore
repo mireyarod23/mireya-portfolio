@@ -7,3 +7,4 @@ dist
 .superpowers/
 .DS_Store
 *.log
+docs/superpowers/
