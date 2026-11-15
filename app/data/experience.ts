@@ -14,7 +14,7 @@ export const experience: Array<ExperienceItem> = [
     role: 'Software Developer',
     period: '2015 — 2020',
     summary:
-      'Museum installations and AR apps, AngularJS web apps, and Oracle/PL-SQL database modernization.',
+      'Windows touch-screen museum installations in C#/.NET and Unity, AR apps, AngularJS web apps, and Oracle/PL-SQL database modernization.',
     current: false,
   },
 ]

@@ -50,9 +50,10 @@ export const projects: Array<Project> = [
   },
   {
     projectId: 'museum-exhibits',
-    title: 'Museum touch-screen exhibits',
-    description: 'Radiation Knowledge game and Owls & Bats interactive for the Bradbury Science Museum.',
-    tags: ['.NET', 'Unity', 'HTML5'],
+    title: 'Museum touch-screen installations',
+    description:
+      'Windows touch-screen installations in C#/.NET and Unity for the Bradbury Science Museum — including the Radiation Knowledge game and the Owls & Bats interactive.',
+    tags: ['C#', '.NET', 'Unity', 'Windows', 'HTML5'],
     compact: true,
   },
 ]

@@ -15,6 +15,6 @@ export const skillGroups: Array<SkillGroup> = [
   },
   {
     label: 'Data & More',
-    items: ['Interactive charts', 'SQL / PL-SQL', 'MongoDB', 'Python', 'C#', 'Docker', 'Figma'],
+    items: ['Interactive charts', 'SQL / PL-SQL', 'MongoDB', 'Python', 'C# / .NET', 'Docker', 'Figma'],
   },
 ]
