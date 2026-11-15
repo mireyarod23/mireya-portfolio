@@ -23,3 +23,10 @@ export interface SkillGroup {
   label: string
   items: Array<string>
 }
+
+export interface CraftCard {
+  craftId: string
+  title: string
+  description: string
+  snippet: string
+}
