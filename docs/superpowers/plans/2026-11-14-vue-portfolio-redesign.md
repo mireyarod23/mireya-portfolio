@@ -2,11 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the legacy 2019 Create React App portfolio with a statically generated Nuxt + TypeScript + Tailwind one-page site and deploy it to Vercel at mireyaroddev.com.
+**Goal:** Replace the legacy 2019 Create React App portfolio with a statically generated Nuxt + TypeScript + Tailwind one-page site in the approved "Committed Petrol" design, and deploy it to Vercel at mireyaroddev.com.
 
 **Architecture:** Single-page Nuxt app (latest stable, `app/` source directory), statically generated. One Vue SFC per page section; all copy/projects/skills live in typed data files under `app/data/` so components never hard-code content. Vitest + @nuxt/test-utils component tests assert each section renders its data. Deployment is Vercel auto-deploy from GitHub `master`; DNS fixed by switching Network Solutions nameservers to Vercel.
 
-**Tech Stack:** Nuxt (latest stable), TypeScript, Tailwind CSS v4 (`@tailwindcss/vite`), Fontsource variable fonts (Space Grotesk, Inter), Vitest, @nuxt/test-utils, happy-dom, Vercel.
+**Tech Stack:** Nuxt (latest stable), TypeScript, Tailwind CSS v4 (`@tailwindcss/vite`), Fontsource variable fonts (Space Grotesk, Inter, JetBrains Mono), Vitest, @nuxt/test-utils, happy-dom, Vercel.
+
+**Design ("Committed Petrol" — see spec Visual Design for full tokens):** deep petrol band carries nav + hero and the skills section; petrol-tinted paper between; pill buttons (amber primary on dark, petrol on light); cards with 1px hairline borders; compact list rows for older work; amber period after headings; Space Grotesk display / Inter body / JetBrains Mono microtext. No pure #000/#fff.
 
 **Code conventions (from Mireya's Avanza rules — `~/Development/avanza/docs/agent/rules/{vue,typescript,testing}.md`):**
 - SFC block order `script setup lang="ts"` → `template` → `style scoped` (omit style block if unused); script internal order: imports → props/emits → reactive state → computed → watchers → lifecycle → functions
@@ -42,10 +44,11 @@
 │   │   ├── HeroSection.vue
 │   │   ├── WorkSection.vue
 │   │   ├── ProjectCard.vue
+│   │   ├── ProjectRow.vue
 │   │   ├── ExperienceSection.vue
 │   │   ├── SkillsSection.vue
 │   │   ├── ContactSection.vue
-│   │   └── __tests__/              (co-located specs, one per component)
+│   │   └── __tests__/              (co-located specs)
 │   └── data/
 │       ├── types.ts
 │       ├── site.ts
@@ -55,8 +58,7 @@
 ├── public/
 │   ├── favicon.svg
 │   └── images/
-│       ├── climate-perspective.jpg
-│       └── ranger-glove.jpg
+│       └── climate-perspective.jpg
 └── docs/superpowers/...            (spec + this plan)
 ```
 
@@ -68,17 +70,16 @@ Removed: `src/`, `public/` (CRA version), `build/`, CRA `package.json`/`package-
 
 **Files:**
 - Delete (tracked): `src/`, `public/`, `build/`, `package.json`, `package-lock.json`, `README.md`, `node_modules/` (if tracked)
-- Preserve to `/tmp`: `src/assets/Climate_P.png`, `src/assets/Ranger_Glove.jpg`
+- Preserve to `/tmp`: `src/assets/Climate_P.png`
 
-- [ ] **Step 1: Stage the two images we keep**
+- [ ] **Step 1: Stage the image we keep**
 
 ```bash
 cp /Users/m/Development/webpage_react_aws/src/assets/Climate_P.png /tmp/Climate_P.png
-cp /Users/m/Development/webpage_react_aws/src/assets/Ranger_Glove.jpg /tmp/Ranger_Glove.jpg
-ls -la /tmp/Climate_P.png /tmp/Ranger_Glove.jpg
+ls -la /tmp/Climate_P.png
 ```
 
-Expected: both files listed.
+Expected: file listed.
 
 - [ ] **Step 2: Remove tracked CRA files**
 
@@ -104,10 +105,10 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 ---
 
-### Task 2: Nuxt + Tailwind scaffold
+### Task 2: Nuxt + Tailwind scaffold with the petrol design tokens
 
 **Files:**
-- Create: `package.json`, `nuxt.config.ts`, `tsconfig.json`, `app/app.vue`, `app/assets/css/main.css`, `public/favicon.svg`, `public/images/*.jpg`
+- Create: `package.json`, `nuxt.config.ts`, `tsconfig.json`, `app/app.vue`, `app/assets/css/main.css`, `public/favicon.svg`, `public/images/climate-perspective.jpg`
 - Modify: `.gitignore`
 
 - [ ] **Step 1: Write `package.json`**
@@ -131,6 +132,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
   },
   "devDependencies": {
     "@fontsource-variable/inter": "^5.0.0",
+    "@fontsource-variable/jetbrains-mono": "^5.0.0",
     "@fontsource-variable/space-grotesk": "^5.0.0",
     "@nuxt/test-utils": "^3.14.0",
     "@tailwindcss/vite": "^4.0.0",
@@ -171,21 +173,32 @@ export default defineNuxtConfig({
 }
 ```
 
-- [ ] **Step 4: Write `app/assets/css/main.css` (design tokens from the spec)**
+- [ ] **Step 4: Write `app/assets/css/main.css` (Committed Petrol tokens from the spec)**
 
 ```css
 @import "tailwindcss";
 @import "@fontsource-variable/space-grotesk";
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
 
 @theme {
-  --color-cream: #fdf6ec;
-  --color-ink: #2b2b2b;
-  --color-berry: #c2185b;
-  --color-berry-light: #ff8fb3;
-  --color-tan: #e5d9c5;
+  --color-petrol: #0d3b3e;
+  --color-petrol-line: #2e5a5c;
+  --color-mint: #6fc2b4;
+  --color-teal: #1d7a6e;
+  --color-amber: #ffb35c;
+  --color-paper: #f6f9f7;
+  --color-card: #fbfdfc;
+  --color-line: #dbe6e0;
+  --color-ink: #22302d;
+  --color-ink-muted: #5c6b65;
+  --color-ink-faint: #8fa39b;
+  --color-frost: #eef6f4;
+  --color-frost-muted: #9dc4bd;
+  --color-frost-body: #c7ded8;
   --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 }
 
 html {
@@ -203,31 +216,30 @@ html {
 
 ```vue
 <template>
-  <div class="min-h-screen bg-cream font-body text-ink antialiased">
+  <div class="min-h-screen bg-paper font-body text-ink antialiased">
     <h1 class="p-10 font-display text-4xl font-bold">
-      mireyaroddev<span class="text-berry">.</span>com — under construction
+      mireyaroddev<span class="text-amber">.</span>com — under construction
     </h1>
   </div>
 </template>
 ```
 
-- [ ] **Step 6: Write `public/favicon.svg`**
+- [ ] **Step 6: Write `public/favicon.svg`** (frost "m" + amber "." on petrol)
 
 ```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#fdf6ec"/><text x="32" y="45" font-family="system-ui, sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#2b2b2b">m<tspan fill="#c2185b">.</tspan></text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0d3b3e"/><text x="32" y="45" font-family="system-ui, sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#eef6f4">m<tspan fill="#ffb35c">.</tspan></text></svg>
 ```
 
-- [ ] **Step 7: Optimize and place the preserved images**
+- [ ] **Step 7: Optimize and place the preserved image**
 
 ```bash
 cd /Users/m/Development/webpage_react_aws
 mkdir -p public/images
 sips -Z 1200 -s format jpeg -s formatOptions 80 /tmp/Climate_P.png --out public/images/climate-perspective.jpg
-sips -Z 1200 -s format jpeg -s formatOptions 80 /tmp/Ranger_Glove.jpg --out public/images/ranger-glove.jpg
 ls -la public/images/
 ```
 
-Expected: two `.jpg` files, each well under 300 KB.
+Expected: one `.jpg` file, well under 300 KB.
 
 - [ ] **Step 8: Replace `.gitignore` content**
 
@@ -256,7 +268,7 @@ Expected: install succeeds; generate ends with `✔ You can now deploy .output/p
 
 ```bash
 git add -A
-git commit -m "feat: scaffold Nuxt + Tailwind app with design tokens
+git commit -m "feat: scaffold Nuxt + Tailwind app with Committed Petrol design tokens
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -283,6 +295,7 @@ export interface Project {
   link?: { label: string; url: string }
   image?: { src: string; alt: string }
   flagship?: boolean
+  compact?: boolean
 }
 
 export interface ExperienceItem {
@@ -328,6 +341,8 @@ export const site = {
 
 - [ ] **Step 3: Write `app/data/projects.ts`**
 
+Order matters: featured cards render in array order (Orion full-width, then Avanza + Climate Perspective two-up), compact rows after.
+
 ```ts
 import type { Project } from './types'
 
@@ -365,30 +380,26 @@ export const projects: Array<Project> = [
     },
   },
   {
-    projectId: 'bandelier',
-    title: 'Bandelier AR Tour',
-    description:
-      'Augmented-reality tour app for Bandelier National Monument, built with Unity and the Vuforia SDK.',
-    tags: ['Unity', 'Vuforia', 'C#', 'AR'],
-  },
-  {
     projectId: 'ranger-glove',
     title: 'Ranger Glove',
-    description:
-      'Open-source virtual-reality glove built from off-the-shelf parts — my master’s thesis. MIT licensed so anyone can build one.',
-    tags: ['C#', 'Unity', 'Arduino', 'Hardware'],
+    description: 'Open-source virtual-reality glove built from off-the-shelf parts — my master’s thesis.',
+    tags: ['Unity', 'Arduino', 'C#'],
     link: { label: 'GitHub', url: 'https://github.com/mireyarod23/RangerGlove' },
-    image: {
-      src: '/images/ranger-glove.jpg',
-      alt: 'The Ranger Glove virtual-reality glove prototype',
-    },
+    compact: true,
+  },
+  {
+    projectId: 'bandelier',
+    title: 'Bandelier AR Tour',
+    description: 'Augmented-reality tour app for Bandelier National Monument.',
+    tags: ['Unity', 'Vuforia'],
+    compact: true,
   },
   {
     projectId: 'museum-exhibits',
     title: 'Museum touch-screen exhibits',
-    description:
-      'Radiation Knowledge game and Owls & Bats interactive for the Bradbury Science Museum — .NET, Unity, and HTML5.',
+    description: 'Radiation Knowledge game and Owls & Bats interactive for the Bradbury Science Museum.',
     tags: ['.NET', 'Unity', 'HTML5'],
+    compact: true,
   },
 ]
 ```
@@ -402,7 +413,7 @@ export const experience: Array<ExperienceItem> = [
   {
     organization: 'OpenEye, Cadence Molecular Sciences',
     role: 'Software Engineer, Front-End',
-    period: '2020 — present',
+    period: '2020 — now',
     summary:
       'Front end for Orion, a cloud-native molecular-design platform used by pharma and biotech scientists.',
     current: true,
@@ -520,7 +531,7 @@ cd /Users/m/Development/webpage_react_aws && npx vitest run app/components/__tes
 
 Expected: FAIL (cannot resolve `~/components/AppNav.vue`).
 
-- [ ] **Step 4: Write `app/components/AppNav.vue`**
+- [ ] **Step 4: Write `app/components/AppNav.vue`** (sits on the petrol band)
 
 ```vue
 <script setup lang="ts">
@@ -534,10 +545,10 @@ const sectionLinks = [
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 border-b-2 border-ink bg-cream/95 backdrop-blur">
-    <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3" aria-label="Main">
+  <header class="sticky top-0 z-50 border-b border-petrol-line bg-petrol/95 text-frost backdrop-blur">
+    <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4" aria-label="Main">
       <a href="#top" data-test="nav-logo" class="font-display text-lg font-bold">
-        mireya<span class="text-berry">.</span>
+        mireya<span class="text-amber">.</span>
       </a>
 
       <div class="hidden items-center gap-6 text-sm font-semibold sm:flex">
@@ -546,14 +557,14 @@ const sectionLinks = [
           :key="sectionLink.href"
           :href="sectionLink.href"
           data-test="nav-link"
-          class="hover:text-berry"
+          class="text-frost-muted transition hover:text-frost"
         >
           {{ sectionLink.label }}
         </a>
         <a
           href="#contact"
           data-test="nav-link"
-          class="rounded-md bg-berry px-3 py-1.5 text-cream transition hover:bg-ink"
+          class="rounded-full bg-amber px-4 py-1.5 font-display font-bold text-petrol transition hover:bg-frost"
         >
           Contact
         </a>
@@ -561,7 +572,7 @@ const sectionLinks = [
 
       <button
         data-test="menu-button"
-        class="rounded-md border-2 border-ink px-2 py-1 text-sm font-bold sm:hidden"
+        class="rounded-full border border-petrol-line px-3 py-1 text-sm font-semibold sm:hidden"
         :aria-expanded="isMenuOpen"
         aria-controls="mobile-menu"
         @click="isMenuOpen = !isMenuOpen"
@@ -574,14 +585,14 @@ const sectionLinks = [
       v-if="isMenuOpen"
       id="mobile-menu"
       data-test="mobile-menu"
-      class="border-t-2 border-ink px-6 py-2 sm:hidden"
+      class="border-t border-petrol-line px-6 py-2 sm:hidden"
     >
       <a
         v-for="sectionLink in [...sectionLinks, { label: 'Contact', href: '#contact' }]"
         :key="sectionLink.href"
         :href="sectionLink.href"
         data-test="mobile-nav-link"
-        class="block py-2 text-sm font-semibold hover:text-berry"
+        class="block py-2 text-sm font-semibold text-frost-muted hover:text-frost"
         @click="isMenuOpen = false"
       >
         {{ sectionLink.label }}
@@ -603,7 +614,7 @@ Expected: PASS (3 tests).
 
 ```bash
 git add vitest.config.ts app/components
-git commit -m "feat: add sticky anchor nav with mobile menu (TDD)
+git commit -m "feat: add sticky petrol nav with mobile menu (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -624,10 +635,11 @@ import HeroSection from '~/components/HeroSection.vue'
 import { site } from '~/data/site'
 
 describe('HeroSection', () => {
-  it('renders the headline with its highlight', async () => {
+  it('renders the full headline', async () => {
     const wrapper = await mountSuspended(HeroSection)
     expect(wrapper.text()).toContain(site.headline.pre)
     expect(wrapper.text()).toContain(site.headline.highlight)
+    expect(wrapper.text()).toContain(site.headline.post)
   })
 
   it('renders every stack badge', async () => {
@@ -655,7 +667,7 @@ npx vitest run app/components/__tests__/HeroSection.spec.ts
 
 Expected: FAIL (cannot resolve component).
 
-- [ ] **Step 3: Write `app/components/HeroSection.vue`**
+- [ ] **Step 3: Write `app/components/HeroSection.vue`** (petrol band, continues from the nav)
 
 ```vue
 <script setup lang="ts">
@@ -663,41 +675,41 @@ import { site } from '~/data/site'
 </script>
 
 <template>
-  <section id="top" class="mx-auto max-w-5xl px-6 pb-16 pt-20">
-    <p class="text-xs font-bold uppercase tracking-[0.2em] text-berry">{{ site.eyebrow }}</p>
-    <h1 class="mt-4 font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
-      {{ site.headline.pre }}<br>
-      <span class="text-berry">{{ site.headline.highlight }}</span><br>
-      {{ site.headline.post }}
-    </h1>
-    <p class="mt-6 max-w-xl text-ink/70">{{ site.intro }}</p>
+  <section id="top" class="bg-petrol text-frost">
+    <div class="mx-auto max-w-5xl px-6 pb-20 pt-14">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-mint">{{ site.eyebrow }}</p>
+      <h1 class="mt-5 max-w-2xl font-display text-5xl font-bold leading-[1.08] tracking-tight sm:text-6xl">
+        {{ site.headline.pre }} {{ site.headline.highlight }} {{ site.headline.post }}
+      </h1>
+      <p class="mt-6 max-w-xl leading-relaxed text-frost-muted">{{ site.intro }}</p>
 
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a
-        href="#work"
-        data-test="hero-work-link"
-        class="-rotate-1 rounded-lg bg-ink px-5 py-2.5 text-sm font-bold text-cream transition hover:rotate-0 hover:bg-berry"
-      >See my work ↓</a>
-      <a
-        :href="site.links.github"
-        data-test="hero-github-link"
-        class="rounded-lg border-2 border-ink px-4 py-2 text-sm font-bold transition hover:bg-ink hover:text-cream"
-      >GitHub</a>
-      <a
-        :href="site.links.linkedin"
-        data-test="hero-linkedin-link"
-        class="rounded-lg border-2 border-ink px-4 py-2 text-sm font-bold transition hover:bg-ink hover:text-cream"
-      >LinkedIn</a>
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href="#work"
+          data-test="hero-work-link"
+          class="rounded-full bg-amber px-6 py-2.5 font-display text-sm font-bold text-petrol transition hover:bg-frost"
+        >See the work ↓</a>
+        <a
+          :href="site.links.github"
+          data-test="hero-github-link"
+          class="rounded-full border border-petrol-line px-5 py-2 text-sm font-semibold transition hover:border-mint hover:text-mint"
+        >GitHub</a>
+        <a
+          :href="site.links.linkedin"
+          data-test="hero-linkedin-link"
+          class="rounded-full border border-petrol-line px-5 py-2 text-sm font-semibold transition hover:border-mint hover:text-mint"
+        >LinkedIn</a>
+      </div>
+
+      <ul class="mt-8 flex flex-wrap gap-2">
+        <li
+          v-for="badge in site.badges"
+          :key="badge"
+          data-test="hero-badge"
+          class="rounded-md border border-petrol-line px-2.5 py-1 font-mono text-[11px] text-mint"
+        >{{ badge }}</li>
+      </ul>
     </div>
-
-    <ul class="mt-7 flex flex-wrap gap-2">
-      <li
-        v-for="badge in site.badges"
-        :key="badge"
-        data-test="hero-badge"
-        class="rounded-full border border-tan bg-white px-3 py-1 text-xs font-semibold"
-      >{{ badge }}</li>
-    </ul>
   </section>
 </template>
 ```
@@ -714,17 +726,17 @@ Expected: PASS (3 tests).
 
 ```bash
 git add app/components/__tests__/HeroSection.spec.ts app/components/HeroSection.vue
-git commit -m "feat: add hero section (TDD)
+git commit -m "feat: add petrol hero section (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
 
 ---
 
-### Task 6: ProjectCard + WorkSection (TDD)
+### Task 6: ProjectCard + ProjectRow + WorkSection (TDD)
 
 **Files:**
-- Create: `app/components/__tests__/WorkSection.spec.ts`, `app/components/ProjectCard.vue`, `app/components/WorkSection.vue`
+- Create: `app/components/__tests__/WorkSection.spec.ts`, `app/components/ProjectCard.vue`, `app/components/ProjectRow.vue`, `app/components/WorkSection.vue`
 
 - [ ] **Step 1: Write the failing test `app/components/__tests__/WorkSection.spec.ts`**
 
@@ -740,6 +752,14 @@ describe('WorkSection', () => {
     for (const project of projects) {
       expect(wrapper.text()).toContain(project.title)
     }
+  })
+
+  it('renders compact projects as rows and the rest as cards', async () => {
+    const wrapper = await mountSuspended(WorkSection)
+    const expectedRows = projects.filter(project => project.compact).length
+    const expectedCards = projects.length - expectedRows
+    expect(wrapper.findAll('[data-test="project-row"]').length).toBe(expectedRows)
+    expect(wrapper.findAll('[data-test="project-card"]').length).toBe(expectedCards)
   })
 
   it('marks Avanza as in development with no outbound link', async () => {
@@ -780,10 +800,11 @@ defineProps<Props>()
 
 <template>
   <article
-    class="rounded-xl border-2 border-ink bg-white p-5"
-    :class="project.flagship ? 'shadow-[6px_6px_0_var(--color-berry)] sm:col-span-2' : ''"
+    data-test="project-card"
+    class="rounded-2xl border border-line bg-card p-6"
+    :class="project.flagship ? 'sm:col-span-2' : ''"
   >
-    <p v-if="project.eyebrow" class="text-[11px] font-bold uppercase tracking-[0.15em] text-berry">
+    <p v-if="project.eyebrow" class="font-mono text-[10px] uppercase tracking-[0.15em] text-teal">
       {{ project.eyebrow }}
     </p>
     <h3 class="mt-1 font-display text-xl font-bold">
@@ -791,7 +812,7 @@ defineProps<Props>()
       <span
         v-if="project.badge"
         data-test="project-badge"
-        class="ml-2 inline-block -translate-y-0.5 rounded-full bg-berry px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-cream"
+        class="ml-2 inline-block -translate-y-0.5 rounded-full bg-amber px-2.5 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-petrol"
       >{{ project.badge }}</span>
     </h3>
     <img
@@ -799,53 +820,89 @@ defineProps<Props>()
       :src="project.image.src"
       :alt="project.image.alt"
       data-test="project-image"
-      class="mt-3 w-full rounded-lg border border-tan"
+      class="mt-3 w-full rounded-lg border border-line"
       loading="lazy"
     >
-    <p class="mt-2 text-sm text-ink/70">{{ project.description }}</p>
-    <p class="mt-3 text-xs text-ink/50">{{ project.tags.join(' · ') }}</p>
+    <p class="mt-2 text-sm leading-relaxed text-ink-muted">{{ project.description }}</p>
+    <p class="mt-3 font-mono text-[10px] uppercase tracking-wide text-ink-faint">{{ project.tags.join(' · ') }}</p>
     <a
       v-if="project.link"
       :href="project.link.url"
       data-test="project-link"
-      class="mt-3 inline-block text-sm font-bold text-berry hover:underline"
+      class="mt-3 inline-block text-sm font-bold text-teal hover:underline"
     >{{ project.link.label }} →</a>
   </article>
 </template>
 ```
 
-- [ ] **Step 4: Write `app/components/WorkSection.vue`**
+- [ ] **Step 4: Write `app/components/ProjectRow.vue`**
+
+```vue
+<script setup lang="ts">
+import type { Project } from '~/data/types'
+
+interface Props {
+  project: Project
+}
+
+defineProps<Props>()
+</script>
+
+<template>
+  <li data-test="project-row" class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4">
+    <p class="text-sm">
+      <span class="font-display text-base font-bold">{{ project.title }}</span>
+      <span class="ml-2 text-ink-muted">— {{ project.description }}</span>
+      <a
+        v-if="project.link"
+        :href="project.link.url"
+        data-test="project-link"
+        class="ml-2 font-bold text-teal hover:underline"
+      >{{ project.link.label }} →</a>
+    </p>
+    <span class="font-mono text-[10px] uppercase tracking-wide text-ink-faint">{{ project.tags.join(' · ') }}</span>
+  </li>
+</template>
+```
+
+- [ ] **Step 5: Write `app/components/WorkSection.vue`**
 
 ```vue
 <script setup lang="ts">
 import { projects } from '~/data/projects'
+
+const featuredProjects = projects.filter(project => !project.compact)
+const compactProjects = projects.filter(project => project.compact)
 </script>
 
 <template>
-  <section id="work" class="bg-white py-16">
+  <section id="work" class="py-16">
     <div class="mx-auto max-w-5xl px-6">
-      <h2 class="font-display text-3xl font-bold">Selected work<span class="text-berry">.</span></h2>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2">
-        <ProjectCard v-for="project in projects" :key="project.projectId" :project="project" />
+      <h2 class="font-display text-3xl font-bold">Selected work<span class="text-amber">.</span></h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <ProjectCard v-for="project in featuredProjects" :key="project.projectId" :project="project" />
       </div>
+      <ul class="mt-6 divide-y divide-line border-t border-line">
+        <ProjectRow v-for="project in compactProjects" :key="project.projectId" :project="project" />
+      </ul>
     </div>
   </section>
 </template>
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [ ] **Step 6: Run test to verify it passes**
 
 ```bash
 npx vitest run app/components/__tests__/WorkSection.spec.ts
 ```
 
-Expected: PASS (3 tests).
+Expected: PASS (4 tests).
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add app/components/__tests__/WorkSection.spec.ts app/components/ProjectCard.vue app/components/WorkSection.vue
-git commit -m "feat: add selected-work section with project cards (TDD)
+git add app/components/__tests__/WorkSection.spec.ts app/components/ProjectCard.vue app/components/ProjectRow.vue app/components/WorkSection.vue
+git commit -m "feat: add selected-work section with cards and compact rows (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -892,7 +949,7 @@ npx vitest run app/components/__tests__/ExperienceSection.spec.ts
 
 Expected: FAIL (cannot resolve component).
 
-- [ ] **Step 3: Write `app/components/ExperienceSection.vue`**
+- [ ] **Step 3: Write `app/components/ExperienceSection.vue`** (list rows, mono periods right-aligned)
 
 ```vue
 <script setup lang="ts">
@@ -900,26 +957,29 @@ import { education, experience } from '~/data/experience'
 </script>
 
 <template>
-  <section id="experience" class="mx-auto max-w-5xl px-6 py-16">
-    <h2 class="font-display text-3xl font-bold">Experience<span class="text-berry">.</span></h2>
-    <ol class="mt-8 space-y-6">
+  <section id="experience" class="mx-auto max-w-5xl px-6 pb-16">
+    <h2 class="font-display text-3xl font-bold">Experience<span class="text-amber">.</span></h2>
+    <ol class="mt-6 divide-y divide-line">
       <li
         v-for="item in experience"
         :key="item.organization"
         data-test="experience-item"
-        class="border-l-4 pl-5"
-        :class="item.current ? 'border-berry' : 'border-tan'"
+        class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
       >
-        <h3 class="font-display text-lg font-bold">
-          {{ item.organization }}
-          <span class="ml-1 text-sm font-semibold text-ink/50">
-            · {{ item.role }} · {{ item.period }}
-          </span>
-        </h3>
-        <p class="mt-1 text-sm text-ink/70">{{ item.summary }}</p>
+        <div class="max-w-xl">
+          <h3 class="font-display text-base font-bold">
+            {{ item.organization }}
+            <span class="ml-1 text-sm font-normal text-ink-muted">· {{ item.role }}</span>
+          </h3>
+          <p class="mt-1 text-sm text-ink-muted">{{ item.summary }}</p>
+        </div>
+        <span
+          class="font-mono text-[11px] uppercase tracking-wide"
+          :class="item.current ? 'text-teal' : 'text-ink-faint'"
+        >{{ item.period }}</span>
       </li>
     </ol>
-    <p data-test="education" class="mt-8 text-sm text-ink/60">{{ education }}</p>
+    <p data-test="education" class="mt-6 text-sm text-ink-faint">{{ education }}</p>
   </section>
 </template>
 ```
@@ -936,7 +996,7 @@ Expected: PASS (2 tests).
 
 ```bash
 git add app/components/__tests__/ExperienceSection.spec.ts app/components/ExperienceSection.vue
-git commit -m "feat: add experience timeline section (TDD)
+git commit -m "feat: add experience section (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -979,7 +1039,7 @@ npx vitest run app/components/__tests__/SkillsSection.spec.ts
 
 Expected: FAIL (cannot resolve component).
 
-- [ ] **Step 3: Write `app/components/SkillsSection.vue`**
+- [ ] **Step 3: Write `app/components/SkillsSection.vue`** (petrol band)
 
 ```vue
 <script setup lang="ts">
@@ -987,15 +1047,15 @@ import { skillGroups } from '~/data/skills'
 </script>
 
 <template>
-  <section id="skills" class="bg-ink py-16 text-cream">
+  <section id="skills" class="bg-petrol py-16 text-frost">
     <div class="mx-auto max-w-5xl px-6">
-      <h2 class="font-display text-3xl font-bold">Skills<span class="text-berry-light">.</span></h2>
+      <h2 class="font-display text-3xl font-bold">Skills<span class="text-amber">.</span></h2>
       <dl class="mt-8 grid gap-6 sm:grid-cols-2">
         <div v-for="group in skillGroups" :key="group.label" data-test="skill-group">
-          <dt class="text-[11px] font-bold uppercase tracking-[0.15em] text-berry-light">
+          <dt class="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-mint">
             {{ group.label }}
           </dt>
-          <dd class="mt-2 text-sm text-cream/80">{{ group.items.join(' · ') }}</dd>
+          <dd class="mt-2 text-sm leading-relaxed text-frost-body">{{ group.items.join(' · ') }}</dd>
         </div>
       </dl>
     </div>
@@ -1015,7 +1075,7 @@ Expected: PASS (1 test).
 
 ```bash
 git add app/components/__tests__/SkillsSection.spec.ts app/components/SkillsSection.vue
-git commit -m "feat: add skills section on dark band (TDD)
+git commit -m "feat: add skills section on petrol band (TDD)
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -1074,21 +1134,21 @@ import { site } from '~/data/site'
 
 <template>
   <section id="contact" class="mx-auto max-w-5xl px-6 py-20 text-center">
-    <h2 class="font-display text-4xl font-bold">Let's talk<span class="text-berry">.</span></h2>
-    <p class="mt-3 text-ink/70">Open to interesting front-end work and collaborations.</p>
+    <h2 class="font-display text-4xl font-bold">Let's talk<span class="text-amber">.</span></h2>
+    <p class="mt-3 text-ink-muted">Open to interesting front-end work and collaborations.</p>
     <a
       :href="`mailto:${site.email}`"
       data-test="email-link"
-      class="mt-7 inline-block -rotate-1 rounded-lg bg-berry px-6 py-3 font-bold text-cream transition hover:rotate-0 hover:bg-ink"
+      class="mt-7 inline-block rounded-full bg-petrol px-7 py-3 font-display font-bold text-frost transition hover:bg-teal"
     >{{ site.email }}</a>
-    <p class="mt-6 space-x-4 text-sm font-bold">
-      <a :href="site.links.linkedin" data-test="linkedin-link" class="hover:text-berry">LinkedIn</a>
-      <span aria-hidden="true">·</span>
-      <a :href="site.links.github" data-test="github-link" class="hover:text-berry">GitHub</a>
+    <p class="mt-6 space-x-4 text-sm font-semibold text-teal">
+      <a :href="site.links.linkedin" data-test="linkedin-link" class="hover:underline">LinkedIn</a>
+      <span aria-hidden="true" class="text-ink-faint">·</span>
+      <a :href="site.links.github" data-test="github-link" class="hover:underline">GitHub</a>
     </p>
-    <footer class="mt-14 text-xs text-ink/40">
+    <footer class="mt-14 font-mono text-[10px] uppercase tracking-wide text-ink-faint">
       Built with Nuxt + TypeScript + Tailwind · deployed on Vercel ·
-      <a :href="site.links.repo" data-test="repo-link" class="underline hover:text-berry">view source on GitHub</a>
+      <a :href="site.links.repo" data-test="repo-link" class="underline hover:text-teal">view source on GitHub</a>
     </footer>
   </section>
 </template>
@@ -1157,7 +1217,7 @@ useHead({
 </script>
 
 <template>
-  <div class="min-h-screen bg-cream font-body text-ink antialiased">
+  <div class="min-h-screen bg-paper font-body text-ink antialiased">
     <AppNav />
     <main>
       <HeroSection />
@@ -1184,12 +1244,12 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col items-center justify-center bg-cream px-6 text-center font-body text-ink">
-    <h1 class="font-display text-6xl font-bold">{{ error.statusCode }}<span class="text-berry">.</span></h1>
-    <p class="mt-4 text-ink/70">This page doesn't exist — the whole site lives on one page anyway.</p>
+  <div class="flex min-h-screen flex-col items-center justify-center bg-paper px-6 text-center font-body text-ink">
+    <h1 class="font-display text-6xl font-bold">{{ error.statusCode }}<span class="text-amber">.</span></h1>
+    <p class="mt-4 text-ink-muted">This page doesn't exist — the whole site lives on one page anyway.</p>
     <a
       href="/"
-      class="mt-8 -rotate-1 rounded-lg bg-ink px-5 py-2.5 text-sm font-bold text-cream transition hover:rotate-0 hover:bg-berry"
+      class="mt-8 rounded-full bg-petrol px-6 py-2.5 font-display text-sm font-bold text-frost transition hover:bg-teal"
     >Back home</a>
   </div>
 </template>

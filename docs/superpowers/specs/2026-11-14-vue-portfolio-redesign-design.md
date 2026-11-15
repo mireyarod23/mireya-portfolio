@@ -16,7 +16,7 @@
 |---|---|
 | Scope | Full redesign (not a port), with refreshed content from the 2026 resume |
 | Structure | One-page scroll, anchor nav (no vue-router pages) |
-| Style | Bold & Playful, Cream + Berry palette |
+| Style | "Committed Petrol" — bold hero-band layout (option B) with the petrol/mint/amber palette (option C), chosen in the visual design review |
 | Contact | Email + LinkedIn + GitHub links only — no form, no backend |
 | Hosting | Vercel (free hobby tier), replacing AWS entirely |
 | Domain | mireyaroddev.com — keep at Network Solutions, switch nameservers to Vercel |
@@ -29,29 +29,37 @@
 Single page, sections in order, sticky top nav with anchor links (Work · Experience · Skills · Contact):
 
 1. **Hero** — Headline "I build interfaces people actually like using." Eyebrow: "Front-End Developer · Albuquerque, NM". Intro sentence drawn from resume summary (11+ years, Vue 3/Nuxt at OpenEye for drug-discovery scientists). Buttons: "See my work ↓" (scrolls to Work), GitHub, LinkedIn. Stack badges: Vue 3, Nuxt, TypeScript, Tailwind CSS, Vitest, Cypress. Text-led — no photo.
-2. **Selected Work** — card grid:
+2. **Selected Work** — mixed layout (no uniform card grid): a full-width flagship card, two standard cards, then a compact list for older work:
    - **Orion (OpenEye, Cadence Molecular Sciences)** — flagship full-width card: migrated legacy AngularJS workflows to Vue 3/Nuxt/TypeScript; design-system components with Storybook + PrimeVue; interactive charts for scientific data; Vitest + Cypress testing. Text-only card with no outbound link — Orion is OpenEye's property; the card describes Mireya's role only (same scope as her public resume).
    - **Climate Perspective** — AI-driven installation, Bradbury Science Museum (MEAN stack). Links to the LANL museum page. Reuses `Climate_P.png`.
-   - **Bandelier AR Tour** — Unity + Vuforia AR tour app for Bandelier National Monument.
-   - **Ranger Glove** — open-source VR glove, master's thesis. Links to github.com/mireyarod23/RangerGlove. Reuses `Ranger_Glove.jpg`.
-   - **Museum touch-screen exhibits** — Radiation Knowledge game & Owls/Bats interactive (.NET, Unity, HTML5). Text-only card (no image).
-   - **Avanza** — teaser card with an "In development" badge: building a reusable Vue 3 component library with Storybook, Tailwind CSS, and Vitest. General terms only — no link, no screenshots, no product details.
+   - **Avanza** — standard card with an "In development" badge: building a reusable Vue 3 component library with Storybook, Tailwind CSS, and Vitest. General terms only — no link, no screenshots, no product details.
+   - **Compact list rows** (title + one-line description + mono tag labels, divided by hairlines): **Ranger Glove** (open-source VR glove, master's thesis, links to github.com/mireyarod23/RangerGlove), **Bandelier AR Tour** (Unity + Vuforia AR tour app), **Museum touch-screen exhibits** (Radiation Knowledge game & Owls/Bats interactive — .NET, Unity, HTML5).
 
-   Image rule: Climate Perspective and Ranger Glove cards show their images; Orion, Bandelier, Museum exhibits, and Avanza cards are text-only.
+   Image rule: only the Climate Perspective card shows an image (`Climate_P.png`, optimized). Everything else is text-only; the old `Ranger_Glove.jpg` is no longer used.
 3. **Experience** — compact timeline: OpenEye (Software Engineer, Front-End, May 2020–present, remote) and LANL (Software Developer, 2015–2020). One line for education: M.S. (2019) & B.S. (2014) Software Systems Design, New Mexico Highlands University.
-4. **Skills** — dark band, four groups from the resume: Front-End (Vue 3, Nuxt 3, TypeScript, Tailwind CSS, PrimeVue, Vite, Storybook); Testing (Vitest, Cypress, code review); AI-Assisted Development (Claude Code, Codex, GitHub Copilot); Data & More (interactive charts, SQL/PL-SQL, MongoDB, Python, C#, Docker, Figma).
+4. **Skills** — petrol band (same surface as the hero), four groups from the resume: Front-End (Vue 3, Nuxt 3, TypeScript, Tailwind CSS, PrimeVue, Vite, Storybook); Testing (Vitest, Cypress, code review); AI-Assisted Development (Claude Code, Codex, GitHub Copilot); Data & More (interactive charts, SQL/PL-SQL, MongoDB, Python, C#, Docker, Figma).
 5. **Contact** — "Let's talk." Email button (mireya.rod23@gmail.com), LinkedIn (linkedin.com/in/mireyarodev), GitHub (github.com/mireyarod23). Footer: "Built with Nuxt + TypeScript + Tailwind · deployed on Vercel · view source on GitHub."
 
 All copy is finalized from the resume during implementation; no placeholder text ships. The unfinished Contact page problem from the old site goes away entirely.
 
 ## Visual Design
 
-- **Palette:** cream background `#fdf6ec`, ink text `#2b2b2b`, berry accent `#c2185b`, berry-light `#ff8fb3` (accents on dark band), tan borders `#e5d9c5`. Skills band uses ink background with cream text.
-- **Type:** bold display grotesque for headlines (Space Grotesk, weight 700–800), Inter for body. Self-hosted via Fontsource (no external font requests). Big, tight-leading headlines; berry-colored period/accent marks as a recurring motif.
-- **Components look:** chunky 2px ink borders, rounded corners, offset berry box-shadow on the flagship card, slightly rotated (-1.5°) primary buttons, pill-shaped badges.
-- **Motion:** subtle only — smooth anchor scrolling, gentle hover states. Respect `prefers-reduced-motion`.
-- **Responsive:** single column on mobile; card grid collapses 2→1; nav collapses to a minimal menu.
-- **Accessibility:** semantic landmarks (header/main/section/footer), one h1, alt text on all project images, visible focus states, AA contrast (ink-on-cream body text; berry used for accents and large text).
+"Committed Petrol" — a committed color strategy (per impeccable's design laws): the deep petrol surface carries the nav + hero band and the skills band (~40% of the page); everything between sits on petrol-tinted light paper. No pure `#000`/`#fff` anywhere; all neutrals tinted toward the petrol hue.
+
+- **Palette (design tokens):**
+  - `petrol` `#0d3b3e` — hero/skills band background; email button; favicon
+  - `petrol-line` `#2e5a5c` — borders on dark surfaces
+  - `mint` `#6fc2b4` — accents on dark (eyebrow, mono labels, badge chips)
+  - `teal` `#1d7a6e` — accent text and links on light surfaces (AA-safe)
+  - `amber` `#ffb35c` — primary CTA pill, heading period motif, Avanza badge
+  - `paper` `#f6f9f7` — light page background; `card` `#fbfdfc` — card surfaces; `line` `#dbe6e0` — hairlines/borders on light
+  - `ink` `#22302d`, `ink-muted` `#5c6b65`, `ink-faint` `#8fa39b` — text on light
+  - `frost` `#eef6f4`, `frost-muted` `#9dc4bd`, `frost-body` `#c7ded8` — text on petrol
+- **Type:** Space Grotesk (display — headings, names, buttons; 700, tight tracking), Inter (body), JetBrains Mono (microtext — eyebrows, tags, dates, footer). All self-hosted via Fontsource variable packages (no external font requests).
+- **Components look:** pill-shaped buttons (amber primary on dark, petrol primary on light); cards with 1px `line` borders and ~16px radius on `card` surfaces; compact list rows divided by hairlines with right-aligned mono tag labels; amber period after section headings ("Selected work**.**") as the recurring motif.
+- **Motion:** subtle only — smooth anchor scrolling, gentle hover transitions. Respect `prefers-reduced-motion`.
+- **Responsive:** single column on mobile; the two-up card row collapses 2→1; list-row tag labels wrap below the title; nav collapses to a minimal menu.
+- **Accessibility:** semantic landmarks (header/main/section/footer), one h1, alt text on the project image, visible focus states, AA contrast (ink-on-paper body; frost-on-petrol body; `teal` not `mint` for small text on light surfaces).
 
 ## Tech Architecture
 
@@ -60,7 +68,7 @@ All copy is finalized from the resume during implementation; no placeholder text
 - **Component layout:** one component per section, kept small:
   - `app.vue` → `AppNav`, `HeroSection`, `WorkSection` (renders `ProjectCard`s), `ExperienceSection`, `SkillsSection`, `ContactSection` (includes footer)
 - **Content model:** all copy, projects, skills, and links live in typed data files (`app/data/site.ts`, `projects.ts`, `skills.ts`, `experience.ts`) with TypeScript interfaces. Components render data; future content edits never touch components.
-- **Assets:** project images copied from the old `src/assets/` into the new app, web-optimized (resized/compressed; modern formats where easy). Favicon replaced with a simple "m." mark in the palette.
+- **Assets:** only `Climate_P.png` is carried over from the old `src/assets/`, web-optimized (resized/compressed). Favicon replaced with a simple "m." mark — frost "m" + amber "." on a petrol rounded square.
 - **SEO:** title, meta description, Open Graph tags, canonical URL, and JSON-LD Person schema (name, job title, links) via Nuxt's head management.
 - **Testing:** Vitest + @nuxt/test-utils component tests — each section renders its data (e.g., all projects from `projects.ts` appear; nav contains the four anchor links). Small suite, run in CI-equivalent (`npm test`) before deploys.
 - **Repo hygiene:** this branch (`codex/vue-portfolio-redesign`) replaces the CRA app in-place: old `src/`, `public/`, `build/`, and CRA dependencies removed; proper `.gitignore` added (node_modules, .nuxt, .output, dist, .superpowers). Recommended post-launch: rename the GitHub repo `webpage_react_aws` → `mireyaroddev` (GitHub redirects old URLs).
