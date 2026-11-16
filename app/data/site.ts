@@ -13,6 +13,10 @@ export const site = {
   intro:
     '11+ years in front-end, the last 6 building Vue 3 and Nuxt apps in TypeScript for drug-discovery scientists at OpenEye, Cadence Molecular Sciences. I turn complex workflows into tools people enjoy.',
   email: 'mireya.rod23@gmail.com',
+  portrait: {
+    src: '/images/mireya.jpg',
+    alt: 'Portrait of Mireya Rodriguez',
+  },
   links: {
     github: 'https://github.com/mireyarod23',
     linkedin: 'https://www.linkedin.com/in/mireyarodev',

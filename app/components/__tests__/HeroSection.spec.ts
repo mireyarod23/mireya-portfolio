@@ -20,6 +20,13 @@ describe('HeroSection', () => {
     }
   })
 
+  it('shows the portrait with an accessible alt', async () => {
+    const wrapper = await mountSuspended(HeroSection)
+    const portrait = wrapper.find('[data-test="hero-portrait"]')
+    expect(portrait.attributes('src')).toBe(site.portrait.src)
+    expect(portrait.attributes('alt')).toBe(site.portrait.alt)
+  })
+
   it('links to GitHub and LinkedIn', async () => {
     const wrapper = await mountSuspended(HeroSection)
     expect(wrapper.find('[data-test="hero-github-link"]').attributes('href')).toBe(site.links.github)

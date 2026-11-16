@@ -8,6 +8,10 @@ useSeoMeta({
   ogDescription: site.metaDescription,
   ogType: 'website',
   ogUrl: site.url,
+  ogImage: `${site.url}/images/og.jpg`,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  twitterCard: 'summary_large_image',
 })
 
 useHead({
