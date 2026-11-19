@@ -4,7 +4,7 @@ export const experience: Array<ExperienceItem> = [
   {
     organization: 'OpenEye, Cadence Molecular Sciences',
     role: 'Software Engineer, Front-End',
-    period: '2020 — now',
+    period: '2020 — 2026',
     summary:
       'Front end for Orion, a cloud-native molecular-design platform used by pharma and biotech scientists.',
     current: true,
